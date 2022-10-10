@@ -18,15 +18,18 @@ class App extends Component {
       water: 0,
       heart: 120,
       temperature: 10,
-      steps: 3000
+      steps: 3000,
+      waterTotal: 1.5
     }
 
     this.onHeartChange = this.onHeartChange.bind(this);
+    this.calculateWater = this.calculateWater.bind(this);
 
   }
   
   onHeartChange(e) {
     this.setState({heart: e.target.value})
+    this.calculateWater(e.target.value)
   }
   
   onStepChange(e) {
@@ -37,6 +40,31 @@ class App extends Component {
     this.setState({temperature: e.target.value})
   }
 
+  calculateWater() {
+    let waterTotal = 1.5
+
+    if (this.state.temp > 20) {
+      for (let i = 20; i < tempMax; i ++) {
+        waterTotal += 0.02
+      }
+    }
+
+    if (this.state.heart > 120) {
+      for (let i = 120; i < 180; i ++) {
+        waterTotal += 0.0008
+      }
+    }
+
+    if (this.state.steps > 10000) {
+      for (let i = 10000; i < 50000; i ++) {
+        waterTotal += 0.00002
+      }
+    }
+    console.log("water =>", this.state.water)
+    console.log("waterTotal =>", waterTotal)
+    return this.setState({water: waterTotal})
+  }
+
   render () {
 
     return (
@@ -45,7 +73,7 @@ class App extends Component {
           <Step 
             icon="local_drink"
             color="#3A85FF"
-            value={1.5}
+            value={this.state.water}
             unit="L"
           />
           <Step 
